@@ -1,0 +1,150 @@
+// @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+  $filtersWidth : 250px;
+  
+  .noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* IE/Edge */
+  user-select: none;           /* non-prefixed version, currently
+                                  not supported by any browser */
+}
+
+  body {
+    background-color: #FFFFFF;
+  }
+  .ui.menu .item img.logo {
+    margin-right: 1.5em;
+  }
+  .main.container {
+    position:relative;
+    top: 70px;
+    height: calc(100% - 80px - 180px);
+  }
+  .wireframe {
+    margin-top: 2em;
+  }
+  .ui.footer.segment {
+    margin: 5em 0em 0em;
+    padding: 5em 0em;
+  }
+  .sidebar { padding:1em; }
+  .pusher { padding: 0 1em;}
+  
+  #filters { width: $filtersWidth; height: 100%; float:left; border-right: 1px solid #ccc; padding:1em;}
+  #documentsResults { padding: 1em; margin-left:$filtersWidth; min-height: 100%;}
+  .docs.ui.cards>.card { width: 190px; }
+  .pages.ui.cards>.card {  }
+  .pages {
+    .divider.vertical.section {
+        position: relative;   width: 30px; margin: 10px 0;transition: all 0.2s ease; 
+        >div { position:absolute; top: 50%; margin-top:-50px; height: 100px;  width:20px; margin-left: 5px; border-radius:10px; background: #555;
+          >i { position: absolute; top: 50%; margin-top: -0.5em; left: 50%; margin-left: -0.5em; width: 1em; cursor:pointer;}
+          >i.add { display: none; }
+          >.ui.popup { width:250px; }
+        }
+        
+        &.empty { 
+          /*width: 10px;*/
+          >div {/* display:none;*/ background:#eee; 
+            >i.info { display: none; }
+            >i.add { display: inline-block; }
+          }
+          &:hover, &.accept {
+            width: 30px;
+            >div {  background: #eee; display:inline-block;}
+          }
+          &.acceptable>div { background : #aca; }
+        }
+    }
+   
+  
+  }
+  #pagination>form>span { margin: 10px; }
+  
+  
+  .editable { 
+    background: #DFEDF2;
+    padding: 4px;
+    border-radius: 2px;
+  }
+
+.ui.table.metadata {
+  tr {
+    th,td { border:none; font-weight: normal; vertical-align:top; padding:0; padding-top:10px;}
+    
+    th { text-align:right; padding-right:10px;}
+    td { font-weight: bold; 
+      i { display: none; }
+      &:hover i { display:inline-block; }
+    }
+    
+  }
+}
+
+.ui.segment.page {
+  div {vertical-align:top; }
+  div.fulltext { 
+	cursor: pointer; 
+	width: 100%; 
+	overflow:auto; 
+	padding: 10px; 
+	font-size: 0.9em; 
+	border: 1px solid #ddd; 
+	height: calc(100% - 146px); 
+    	p { margin:0; padding:3px; }
+
+	&.selection {
+    p.issplitup { border-bottom: 1px solid #aab4b8; }
+    
+
+	  
+	}
+	&.footnote {
+		-webkit-touch-callout: none; /* iOS Safari */
+  		-webkit-user-select: none;   /* Chrome/Safari/Opera */
+  		-khtml-user-select: none;    /* Konqueror */
+  		-moz-user-select: none;      /* Firefox */
+  		-ms-user-select: none;       /* IE/Edge */
+  		user-select: none;           /* no */
+		p.isfootnote { background: #DFEDF2; }
+	}
+	&.split {
+                -webkit-touch-callout: none; /* iOS Safari */
+                -webkit-user-select: none;   /* Chrome/Safari/Opera */
+                -khtml-user-select: none;    /* Konqueror */
+                -moz-user-select: none;      /* Firefox */
+                -ms-user-select: none;       /* IE/Edge */
+                user-select: none;           /* no */
+		p.issplitup { background: #DFEDF2; border-bottom: 1px solid #aab4b8; }
+		p.issplitdown { background: #DFEDF2; }
+	}
+
+  }
+  div.grid { height: calc(100% - 40px);}
+  overflow:hidden;
+  height:100%;
+  #openseadragon1 { border: 1px solid #ddd; height: calc(100% - 96px);}
+}
+.ui.fixed.menu.footer {
+  bottom:0;
+  top:auto;
+  overflow: scroll;
+  white-space:nowrap;
+  .ui.card.link { margin: 10px 5px; width: 89px; }
+}
+
+.item.ch button { width: 200px; }
+
+.ui.button.loadMore { margin: 20px 0; }
+
+
+.relative { position: relative; }
+.hidden { display:none;}
+
+.toctable tr.model { display: none; }
+
+.editable.ui-drag-accept { background: #B4E2F3; }
+.editable.ui-drag-hover { background :#84BFD4; } 

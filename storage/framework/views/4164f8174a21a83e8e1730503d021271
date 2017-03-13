@@ -1,0 +1,16 @@
+<?php $__env->startSection('content'); ?>
+
+	<div class="ui bottom attached segment">
+		<ul>
+		  <?php if(count($bookmarks)>0): ?>
+		  	<?php foreach($bookmarks as $b): ?>
+		     	<li><a href="/document/<?php echo e($b->bid); ?>/<?php echo e($b->issue); ?>/<?php echo e($b->page); ?>" <?php echo e($b->page ? 'target="_viewer"' : ''); ?>><?php echo e($b->bid); ?> / <?php echo e($b->issue); ?> <?php echo e($b->page ? '/ page '.$b->page : ''); ?></a></li>  	
+		  	<?php endforeach; ?>
+		  <?php else: ?>
+		  	<li>No bookmarks.</li> 
+		  <?php endif; ?>
+		</ul>
+	</div>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

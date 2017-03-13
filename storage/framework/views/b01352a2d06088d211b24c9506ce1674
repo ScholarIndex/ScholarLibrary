@@ -1,0 +1,7 @@
+  <?php if(count($articles)>0): ?>
+  	<?php foreach($articles as $p => $t): ?>
+     	<li><a href="/document/<?php echo e($bid); ?>/<?php echo e($issue); ?>/<?php echo e($t['start_page']); ?>" target="_viewer"><?php echo e($t['title']); ?>, <em><?php echo e($t['author']); ?></em></a></li>  	
+  	<?php endforeach; ?>
+  <?php else: ?>
+  	<li>No TOC entry.</li> 
+  <?php endif; ?>

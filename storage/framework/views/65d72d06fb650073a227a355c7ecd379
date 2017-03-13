@@ -1,0 +1,39 @@
+
+
+<div class="ui cards docs">
+<?php foreach($docs as $d): ?>
+
+  	<div class="card" data-bid="<?php echo e($d->bid); ?>" data-issue="_">
+
+    <div class="content">
+      <div class="header" title="<?php echo e($d->title['surface']); ?>"><?php echo e(str_limit($d->title['surface'], $limit = 25, $end = '...')); ?></div>
+      <div class="meta">
+        <a><?php echo e($d->bid); ?></a>
+      </div>
+      <div class="description">
+      	<?php if( count($d->issues) > 0): ?>
+      		<?php echo e(count($d->issues)); ?> issues
+			<div class="ui selection search fluid mini dropdown searchIssue" data-bid="<?php echo e($d->bid); ?>">
+				<input type="hidden" name="">
+				<i class="dropdown icon"></i>
+				<div class="default text">Search issue...</div>
+				<div class="menu"></div>
+			</div>
+		<?php else: ?>
+
+      	<?php endif; ?>
+      </div>
+    </div>
+   
+		<button class="ui bottom attached button openDoc">
+	      <i class="eye icon"></i>
+	      Open
+	    </button>
+   
+  </div>
+<?php endforeach; ?>
+</div>
+
+
+
+

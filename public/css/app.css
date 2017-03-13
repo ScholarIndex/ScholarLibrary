@@ -1,0 +1,288 @@
+.noselect {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Chrome/Safari/Opera */
+  -khtml-user-select: none;
+  /* Konqueror */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* IE/Edge */
+  user-select: none;
+  /* non-prefixed version, currently
+                                  not supported by any browser */
+}
+
+body {
+  background-color: #FFFFFF;
+}
+
+.ui.menu .item img.logo {
+  margin-right: 1.5em;
+}
+
+.main.container {
+  position: relative;
+  top: 70px;
+  height: calc(100% - 80px - 180px);
+}
+
+.wireframe {
+  margin-top: 2em;
+}
+
+.ui.footer.segment {
+  margin: 5em 0em 0em;
+  padding: 5em 0em;
+}
+
+.sidebar {
+  padding: 1em;
+}
+
+.pusher {
+  padding: 0 1em;
+}
+
+#filters {
+  width: 250px;
+  height: 100%;
+  float: left;
+  border-right: 1px solid #ccc;
+  padding: 1em;
+}
+
+#documentsResults {
+  padding: 1em;
+  margin-left: 250px;
+  min-height: 100%;
+}
+
+.docs.ui.cards > .card {
+  width: 190px;
+}
+
+.pages .divider.vertical.section {
+  position: relative;
+  width: 30px;
+  margin: 10px 0;
+  transition: all 0.2s ease;
+}
+
+.pages .divider.vertical.section > div {
+  position: absolute;
+  top: 50%;
+  margin-top: -50px;
+  height: 100px;
+  width: 20px;
+  margin-left: 5px;
+  border-radius: 10px;
+  background: #555;
+}
+
+.pages .divider.vertical.section > div > i {
+  position: absolute;
+  top: 50%;
+  margin-top: -0.5em;
+  left: 50%;
+  margin-left: -0.5em;
+  width: 1em;
+  cursor: pointer;
+}
+
+.pages .divider.vertical.section > div > i.add {
+  display: none;
+}
+
+.pages .divider.vertical.section > div > .ui.popup {
+  width: 250px;
+}
+
+.pages .divider.vertical.section.empty {
+  /*width: 10px;*/
+}
+
+.pages .divider.vertical.section.empty > div {
+  /* display:none;*/
+  background: #eee;
+}
+
+.pages .divider.vertical.section.empty > div > i.info {
+  display: none;
+}
+
+.pages .divider.vertical.section.empty > div > i.add {
+  display: inline-block;
+}
+
+.pages .divider.vertical.section.empty:hover,
+.pages .divider.vertical.section.empty.accept {
+  width: 30px;
+}
+
+.pages .divider.vertical.section.empty:hover > div,
+.pages .divider.vertical.section.empty.accept > div {
+  background: #eee;
+  display: inline-block;
+}
+
+.pages .divider.vertical.section.empty.acceptable > div {
+  background: #aca;
+}
+
+#pagination > form > span {
+  margin: 10px;
+}
+
+.editable {
+  background: #DFEDF2;
+  padding: 4px;
+  border-radius: 2px;
+}
+
+.ui.table.metadata tr th,
+.ui.table.metadata tr td {
+  border: none;
+  font-weight: normal;
+  vertical-align: top;
+  padding: 0;
+  padding-top: 10px;
+}
+
+.ui.table.metadata tr th {
+  text-align: right;
+  padding-right: 10px;
+}
+
+.ui.table.metadata tr td {
+  font-weight: bold;
+}
+
+.ui.table.metadata tr td i {
+  display: none;
+}
+
+.ui.table.metadata tr td:hover i {
+  display: inline-block;
+}
+
+.ui.segment.page {
+  overflow: hidden;
+  height: 100%;
+}
+
+.ui.segment.page div {
+  vertical-align: top;
+}
+
+.ui.segment.page div.fulltext {
+  cursor: pointer;
+  width: 100%;
+  overflow: auto;
+  padding: 10px;
+  font-size: 0.9em;
+  border: 1px solid #ddd;
+  height: calc(100% - 146px);
+}
+
+.ui.segment.page div.fulltext p {
+  margin: 0;
+  padding: 3px;
+}
+
+.ui.segment.page div.fulltext.selection p.issplitup {
+  border-bottom: 1px solid #aab4b8;
+}
+
+.ui.segment.page div.fulltext.footnote {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Chrome/Safari/Opera */
+  -khtml-user-select: none;
+  /* Konqueror */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* IE/Edge */
+  user-select: none;
+  /* no */
+}
+
+.ui.segment.page div.fulltext.footnote p.isfootnote {
+  background: #DFEDF2;
+}
+
+.ui.segment.page div.fulltext.split {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Chrome/Safari/Opera */
+  -khtml-user-select: none;
+  /* Konqueror */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* IE/Edge */
+  user-select: none;
+  /* no */
+}
+
+.ui.segment.page div.fulltext.split p.issplitup {
+  background: #DFEDF2;
+  border-bottom: 1px solid #aab4b8;
+}
+
+.ui.segment.page div.fulltext.split p.issplitdown {
+  background: #DFEDF2;
+}
+
+.ui.segment.page div.grid {
+  height: calc(100% - 40px);
+}
+
+.ui.segment.page #openseadragon1 {
+  border: 1px solid #ddd;
+  height: calc(100% - 96px);
+}
+
+.ui.fixed.menu.footer {
+  bottom: 0;
+  top: auto;
+  overflow: scroll;
+  white-space: nowrap;
+}
+
+.ui.fixed.menu.footer .ui.card.link {
+  margin: 10px 5px;
+  width: 89px;
+}
+
+.item.ch button {
+  width: 200px;
+}
+
+.ui.button.loadMore {
+  margin: 20px 0;
+}
+
+.relative {
+  position: relative;
+}
+
+.hidden {
+  display: none;
+}
+
+.toctable tr.model {
+  display: none;
+}
+
+.editable.ui-drag-accept {
+  background: #B4E2F3;
+}
+
+.editable.ui-drag-hover {
+  background: #84BFD4;
+}
