@@ -1,7 +1,0 @@
-  <?php if(count($pages)>0): ?>
-  	<?php foreach($pages as $p => $t): ?>
-     	<li><a href="/document/<?php echo e($bid); ?>/<?php echo e($issue); ?>/<?php echo e($p+1); ?>" target="_viewer">Image <?php echo e($p+1); ?></a></li>  	
-  	<?php endforeach; ?>
-  <?php else: ?>
-  	<li>No index entry.</li> 
-  <?php endif; ?>

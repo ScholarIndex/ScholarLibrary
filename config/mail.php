@@ -54,8 +54,7 @@ return [
     |
     */
 
-    'from' => ['address' => null, 'name' => null],
-
+    'from' => ['address' => env('MAIL_USERNAME'), 'name' => 'LB Catalogue'],
     /*
     |--------------------------------------------------------------------------
     | E-Mail Encryption Protocol
@@ -119,6 +118,6 @@ return [
     |
     */
 
-    'pretend' => false,
+    'pretend' => env('MAIL_PRETEND', false),
 
 ];

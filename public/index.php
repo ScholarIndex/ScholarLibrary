@@ -1,6 +1,5 @@
 <?php
-ini_set('opcache.revalidate_freq', 0);
-ini_set('opcache.fast_shutdown', 0);
+
 /**
  * Laravel - A PHP Framework For Web Artisans
  *
