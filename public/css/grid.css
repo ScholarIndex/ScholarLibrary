@@ -1,0 +1,149 @@
+/* 
+========================
+  GRIDINATOR CSS v0.4.1
+  http://gridinator.com/
+  
+  GRIDINATOR CSS is a very basic framework to create
+  grid-based layouts. The content of this file is 
+  provided as-is, without support.
+  
+  If you would like to contact GRIDINATOR to suggest
+  improvements, to ask for help or to file a bug report, 
+  please feel free to email: gridinator@steff.me
+  
+  Your grid settings:
+  	columns: 7
+  	column width: 200px
+  	column margin: 2px
+  	container margin: 0px
+    
+=========================
+*/
+* { /* quick reset */
+	margin: 0;	
+}
+
+body { 
+	font-size: 16px;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+
+
+.wrapper {
+	text-align: left;
+	width: 1412px;
+}
+
+.inner-wrapper {
+	background: url(gridinator.png) repeat-y 0 0; /* The file gridinator.png is a grid background; delete this line to remove it. If you did not generate a background image, you can still do so by going to http://gridinator.com/ and entering the details found at the top of this CSS file. You will then be given a grid image to match your original grid.  */
+	clear: both;
+	display: inline;/* IE double margin fix. Feel free to move this to your IE specific stylesheets. */
+	float: left;
+	padding: 0 0px 0 0px;
+	position: relative;
+	width: 1412px;
+}
+
+
+
+
+.container {
+	clear: both;
+	float: left;
+	margin: 0;
+	width: 100%;	
+}
+.one-col, .two-col, .three-col, .four-col, .five-col, .six-col, .seven-col {
+	clear: none;
+	display: inline;/* IE double margin fix. Feel free to move this to your IE specific stylesheets. */
+	float: left;
+	margin: 0 2px 0 0;
+	padding: 0;
+	position: relative;
+	background: #9fcdf6; /* Delete this line to remove the blue colour on columns. */
+}
+.one-col {
+	width: 200px;
+}
+
+.two-col {
+	width: 402px;
+}
+
+.three-col {
+	width: 604px;
+}
+
+.four-col {
+	width: 806px;
+}
+
+.five-col {
+	width: 1008px;
+}
+
+.six-col {
+	width: 1210px;
+}
+
+.seven-col {
+	width: 1412px;
+	margin-right: 0;
+}
+
+.prefix-one {
+	margin-left: 202px;
+}
+
+.prefix-two {
+	margin-left: 404px;
+}
+
+.prefix-three {
+	margin-left: 606px;
+}
+
+.prefix-four {
+	margin-left: 808px;
+}
+
+.prefix-five {
+	margin-left: 1010px;
+}
+
+.prefix-six {
+	margin-left: 1212px;
+}
+
+.suffix-one {
+	margin-right: 204px;
+}
+
+.suffix-two {
+	margin-right: 406px;
+}
+
+.suffix-three {
+	margin-right: 608px;
+}
+
+.suffix-four {
+	margin-right: 810px;
+}
+
+.suffix-five {
+	margin-right: 1012px;
+}
+
+.suffix-six {
+	margin-right: 1214px;
+}
+
+.clear { /* Useful generic clearing class. */
+	clear: both;
+}
+.last-col {
+	margin-right: 0;
+}
