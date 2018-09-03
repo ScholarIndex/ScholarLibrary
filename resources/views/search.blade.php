@@ -1,8 +1,25 @@
 @extends('layout')
 
 @section('sidemenu')
-
+<p class="menuCategory">Sort results</p>
+<select name="sort" id="sort">
+	<option value="score">Pertinence</option>
+	<option value="title">Title</option>
+	<option value="year_asc">Publication date (asc)</option>
+	<option value="year_desc">Publication date (desc)</option>
+</select>
+<p class="menuCategory">Filter results</p>
 <ul>
+	
+	<li class="disabled yearfilter">Publication year<br /><br />
+		<input type="hidden" name="mindate" />
+		<input type="hidden" name="maxdate" />
+		<div class="barchart"></div><br />
+		<ul><li class="chk year"><span class="nm">Enable year filter</span></li></ul>	
+		<div class="yearslider"></div><br /><br />
+	</li>
+	
+		
 	<li class="sub" data-field="publication_language">Language <span class='cnt'></span>
 		<ul>
 		</ul>	
@@ -10,6 +27,11 @@
 	<li class="sub" data-field="digitization_provenance">Provenance <span class='cnt'></span>
 		<ul></ul>
 	</li>
+	<li class="sub" data-field="short_title_ac">Journal <span class='cnt'></span>
+		<ul></ul>
+	</li>
+	
+	<span class="reset allfilters">Reset all filters</span>
 </ul>
 
 @endsection
@@ -17,7 +39,7 @@
 
 @section('searchmenu')
 <div class="searchbar">
-	<a class="title" href="/search">Linked<br />Books</a>
+	<a class="title" href="/search"><img src="/logoVSL.png" /></a>
 	
 	<div class="searchform">
 		<div id="search"><input type="text" value="{{$data['q'] or ''}}" /></div>
@@ -28,7 +50,8 @@
 <!--			<li class="chk">Journal Issue</li>-->
 		</ul>
 	</div>
-	<a href="/auth/logout" class="loginname">{{Auth::user()->login}}</a>
+	<a href="/mydocuments" class="mydoc" title="Logged as : {{Auth::user()->login}}">My Documents</a>
+	<a href="/auth/logout" class="logout" title="Logged as : {{Auth::user()->login}}">Logout</a>
 	<a href="/about" class="about">About</a>
 </div>
 <div class="countersbar">

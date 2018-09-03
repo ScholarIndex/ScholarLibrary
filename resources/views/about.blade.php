@@ -31,7 +31,12 @@
     </head>
     <body>
             	<h1>About</h1>
-     <p>The Linked Books Catalogue is part of the Linked Books project conducted at the École Polytechnique Fédérale de Lausanne, Switzerland. The project’s goal is to index the literature on the history of Venice through citations to both primary and secondary sources.<br /><br />The Catalogue is the digital library application part of the project, where users can read the works that have been digitised, perform full text search, and link to library catalogues or the Venice Scholar: the citation index of the literature on the history of Venice.&nbsp;<br /><br /></p>
+
+				
+	 
+	 <p>The Scholar Library was developed in the context of the <a href="https://dhlab.epfl.ch/page-127959-en.html">Linked Books project</a> led by the Digital Humanities Laboratory of the École Polytechnique Fédérale de Lausanne, Switzerland. The project’s goal is to index the literature on the history of Venice through citations to both primary and secondary sources.
+		<br /><br />
+The Scholar Library is the digital library of the <a href="http://www.scholarindex.eu/">Scholar Index</a>. The former gives users access to digitized publications, while the latter lets users interactively explore the citation graph of literature on the history of Venice. Within the Scholar Library, users can read the works that have been digitised, perform full text search and navigate to the catalogues and information systems of partner institutions as well as to the <a href="http://www.venicescholar.eu/">Venice Scholar</a>, which contains the citation index of the literature.</p>
 
 <strong>Partners of the Project</strong>
 <ul>

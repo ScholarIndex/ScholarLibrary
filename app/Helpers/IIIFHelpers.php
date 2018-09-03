@@ -19,7 +19,7 @@ class IIIFHelpers{
 	$type_document = Cache::get('bid_type_document_'.$bid);
 	$provenance = Cache::get('bid_provenance_'.$bid);
 
-	$uri = 'http://dhlabsrv4.epfl.ch/iiif_lbc_new/';
+	$uri = env('IIIF_ROOT');
 
 	if($type_document == 'monograph')
 		$repo = 'books';

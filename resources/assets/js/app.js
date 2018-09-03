@@ -6,8 +6,23 @@ $.expr[":"].contains = $.expr.createPseudo(function(arg) {
 });
 
 var LBC = {
-
+	
+	ajx : {abort: function () {}},
+	ajx2 : {abort: function() {}},
 	init : function(){
+		
+		$.ajaxSetup({
+			error: function(xhr,status,error){
+				if(xhr.status > 0){
+					if(xhr.status == 401){
+						alertify.error("You don't have permission to execute this action");
+					}else{	
+						alertify.error("Unknown error");
+					}
+				}
+				return false;
+			}
+		});
 	
 		var datajs = $('body').attr('data-js');
 		if(datajs !== ""){	
@@ -24,14 +39,75 @@ var LBC = {
 		        success: function (data) {
 		            $('.progress').html(data);
 		        }
-		    });				
-		}	 
+		    });		
+		    
+		    LBC.refreshBookmarks();	
+		}
+		
+		$(document).on('click', '.bookmarks .fa', function(){
+			$.ajax({
+		        url: "/document/ajaxbookmarks/"+$(this).attr('data-action')+"/"+$(this).attr('data-type')+"/"+$(this).attr('data-documentid')+"/"+$(this).attr('data-pageid'),
+		        type: "GET",
+		        dataType: "html",
+		        success: function (data) {
+					alertify.success("Bookmark modified successfully");
+					LBC.refreshBookmarks();
+		        }
+		    });			
+		});
+		
+		$(document).on('click', '.indexgolden .fa', function(){
+			if(! LBC.checkCred()) return;
+			
+			$.ajax({
+		        url: "/document/ajaxindexgolden/"+$(this).attr('data-action')+"/"+$(this).attr('data-type')+"/"+$(this).attr('data-documentid')+"/"+$(this).attr('data-pageid'),
+		        type: "GET",
+		        dataType: "html",
+		        success: function (data) {
+					alertify.success("Page status modified successfully");
+					LBC.refreshIndexgolden();
+		        }
+		    });			
+		});	
+	},
 
-
-	}
+	checkCred : function(){
+		var roles = $('body').attr('data-cred').split(',');
+		if($.inArray('editor', roles) == -1){
+			alertify.error("You don't have permission to execute this action");
+			return false;	
+		}else{
+			return true;
+		}
+	},
 	
+	refreshBookmarks : function(){
+		LBC.ajx.abort();
+		documentId = $('body').attr('data-documentid');
+		pageId = $('body').attr('data-pageid');
+		LBC.ajx = $.ajax({
+	        url: "/document/bookmarks/"+documentId+"/"+pageId,
+	        type: "GET",
+	        dataType: "html",
+	        success: function (data) {
+	            $('.bookmarks').html(data);
+	        }
+	    });				
+	},
 	
-	
+	refreshIndexgolden : function(){
+		LBC.ajx2.abort();
+		documentId = $('body').attr('data-documentid');
+		pageId = $('body').attr('data-pageid');
+		LBC.ajx2 = $.ajax({
+	        url: "/document/indexgolden/"+documentId+"/"+pageId,
+	        type: "GET",
+	        dataType: "html",
+	        success: function (data) {
+	            $('.indexgolden').html(data);
+	        }
+	    });				
+	}	
 };
 
 var ARTICLEOVERVIEW = {
@@ -78,6 +154,90 @@ var VIEWER = {
 		    e.preventDefault(); // prevent the default action (scroll / move caret)
 		});
 		
+		$(document).on('click', '.action.metadata span', function(){
+			$(this).closest('.action').toggleClass('open');			
+		});
+		
+		$(document).on('click', '.action.split span', function(){
+			if($('div.splitter').length > 0){
+				$('div.splitter').addClass('enabled');			
+			}else{
+				$('#textview p:first').before("<div class='splitter enabled'><span class='splitHere'>validate</span><span class='splitRemove'>&times;</span></div>");
+			}
+			$('#textview').sortable({
+				axis: "y",
+				handle: $("div.splitter") 
+			});
+		});
+		
+		
+		
+        $(document).on('click', '.splitRemove', function(){
+			$('.splitter').remove();
+			$.ajax({
+					url: "/document/saveSplit",
+					type:'POST',
+					dataType:'JSON',
+					data:{
+					"page": $('a.pn.b').attr('data-pageobj'),
+					"split_after_line" : "remove"
+				},
+				success:function(data){
+					if(data.result == "success"){
+						alertify.success("Split removed successfully.");
+					}
+				}
+			});
+		});		
+		
+        $(document).on('click', '.splitHere', function(){
+			var line = $('.splitter').prev('p').attr('l');
+			$.ajax({
+					url: "/document/saveSplit",
+					type:'POST',
+					dataType:'JSON',
+					data:{
+					"page": $('a.pn.b').attr('data-pageobj'),
+					"split_after_line" : line,
+				},
+				success:function(data){
+					if(data.result == "success"){
+						$('div.splitter').removeClass("enabled");
+						alertify.success("Split line saved successfully.");
+					}
+				}
+			});
+		});
+		 		
+        $(document).on('click', '.action.metadata .save', function(){
+        	
+        	
+        	
+        	var saisie = new RegExp('^([0-9]+)?(,[0-9]+)?$');
+
+	        if ( ! saisie.test($('#ppn').val())) {
+	        	alertify.error("Erreur saisie");	
+	        	return;
+	        }
+	        	
+			$.ajax({
+					url: "/document/savePpn",
+					type:'POST',
+					dataType:'JSON',
+					data:{
+					"page": $('a.pn.b').attr('data-pageobj'),
+					"ppn" : $('#ppn').val(),
+					"propagate" : $('#propagate').is(':checked') ? 1 : 0
+				},
+				success:function(data){
+					if(data.result == "success"){
+						$('.action.metadata').removeClass('open');
+						$('#propagate').prop('checked', false);			
+						alertify.success("Printed page number saved successfully.");
+					}
+				}
+			});
+		});		 		
 		
 	}, 
 	
@@ -106,6 +266,10 @@ var VIEWER = {
 	        dataType: "html",
 	        success: function (data) {
 	            $('#textview').html(data);
+	            $('#ppn').val($('a.pn.b').attr('data-ppn'));
+	            $('body').attr('data-pageid', $('.thumb[data-n='+n+']').attr('data-oid'));
+	            LBC.refreshBookmarks();
+	            LBC.refreshIndexgolden();
 	        }
 	    });				
 			
@@ -137,9 +301,16 @@ var SEARCH = {
 		SEARCH.page = $('.noPage').text();
 		
 		$(document).on('click', '.chk', function(e){
+			if($(this).hasClass('year'))	$('.yearfilter').toggleClass('disabled');
 			$(this).toggleClass('checked');
 			SEARCH.page = 1;
 			SEARCH.doSearch();
+		});
+		
+		$(document).on('click', '.reset.allfilters', function(){
+			$('#sidemenu .chk').removeClass('checked');
+			SEARCH.page = 1;
+			SEARCH.doSearch();			
 		});
 		
 		$(document).on('click', '.allfilters.unselect', function(){
@@ -152,6 +323,13 @@ var SEARCH = {
 			SEARCH.page = 1;
 			SEARCH.doSearch(); 
         });
+		
+        $(document).on('click', '.allfilters.viewmore', function(){
+        	$(this).closest('ul').find('li:hidden:lt(7)').show();
+			if($(this).closest('ul').find('li:hidden').length == 0)
+				$(this).remove();
+        });
+				
 		
 		$(document).on('click', '.sub', function(e){
 			if(e.target != this) return;
@@ -180,19 +358,33 @@ var SEARCH = {
 		});
 		
 		$(document).on('click', '.card', function(e){
-			if($(this).hasClass('journal')) return;
-			
-			if($(this).hasClass('article'))
+			e.stopPropagation();
+			e.preventDefault();
+			if($(this).hasClass('journal'))
+				document.location = '/document/journal/'+$(this).attr('data-bid');
+			else if($(this).hasClass('article'))
 				document.location = '/article/overview/'+$(this).attr('data-oid');
-			
-			if($(this).attr('data-bid') != "")
+			else if($(this).attr('data-bid') != "")
 				document.location = '/document/overview/'+$(this).attr('data-bid');
 		});
 		
-		$(document).on('click', '.fa-arrow-circle-o-right', function(){
+		$(document).on('click','#content', function(){
+			$('.countersbar li.cat').removeClass('disabled');
+			SEARCH.page = 1;
+			SEARCH.doSearch();
+		});		
+		
+		$(document).on('click', '.fa-arrow-circle-o-right', function(e){
+			e.preventDefault();
+			e.stopPropagation();
 			if($(this).closest('.card').attr('data-bid') != "")
 				document.location = '/document/overview/'+$(this).closest('.card').attr('data-bid')+'/'+$(this).closest('.card').find('select').val();
 			
+		});
+		
+		$(document).on('click', '.card.journal select', function(e){
+			e.preventDefault();
+			e.stopPropagation();			
 		});
 		
 	
@@ -213,12 +405,16 @@ var SEARCH = {
 			SEARCH.doSearch();	
 		});		
 
+		$(document).on('change', 'select#sort', function(){
+			SEARCH.page = 1;		
+			SEARCH.doSearch();	
+		});		
+
 		 
 		SEARCH.doSearch();
 	},
 	
-	refreshFilters : function(){
-
+	getFilters : function(){
 		var filtrs = {};	
 		$('.sub').each(function(){
 			var sub = $(this);
@@ -227,7 +423,25 @@ var SEARCH = {
 			$(this).find('li.checked').each(function(){
 				filtrs[sub.attr('data-field')].push($(this).attr('data-key'));
 			});
-		});
+		});	
+		
+		var mindate = $('input[name="mindate"]').val();
+        var maxdate = $('input[name="maxdate"]').val();
+        if($('.chk.year').hasClass('checked') && (mindate != "" || maxdate != "")){
+            filtrs.year = {};
+            filtrs.year.mindate = mindate;
+            filtrs.year.maxdate = maxdate;
+        }
+        
+        
+		return filtrs;
+	},
+	
+	refreshFilters : function(){
+
+
+		
+		var filtrs = SEARCH.getFilters();
 
 		$('.sub').each(function(){
 			var sub = $(this);
@@ -255,19 +469,22 @@ var SEARCH = {
 		});
 	},
 	
+	counterNotation : function(n){
+		
+		if(n > 9999){
+			return (Math.floor(n/1000))+"k";
+		}else{
+			return n;
+		}
+		
+	},
+	
 	doSearch : function(){
 		
 		SEARCH.refreshFilters();
+		SEARCH.yearBarChart();
 		
-		var filtrs = {};	
-		$('.sub').each(function(){
-			var sub = $(this);
-			filtrs[sub.attr('data-field')] = [];
-			
-			$(this).find('li.checked').each(function(){
-				filtrs[sub.attr('data-field')].push($(this).attr('data-key'));
-			});
-		});
+		var filtrs = SEARCH.getFilters();
 
 		$.ajax({
 	        url: "/count",
@@ -280,14 +497,15 @@ var SEARCH = {
 	        		'titles' : $('.filters .chk.titles').hasClass('checked'), 
 	        		'publishers' : $('.filters .chk.publishers').hasClass('checked'),	
 	        	},
-	        	'filtrs' : filtrs 
+	        	'filtrs' : filtrs, 
+	        	'sort' : $('select#sort').val()
 	        },
 	        dataType: "json",
 	        success: function (data) {
-	        	$('.docs span').html(data.response.response.numFound);	
-	        	$('.cat.monograph span').html(data.response.facet_counts.facet_fields.ns[_SOLR_ROOT_+'.bibliodb_books']);
-	        	$('.cat.article span').html(data.response.facet_counts.facet_fields.ns[_SOLR_ROOT_+'.bibliodb_articles']);
-	        	$('.cat.journal span').html(data.response.facet_counts.facet_fields.ns[_SOLR_ROOT_+'.bibliodb_journals']);
+	        	$('.docs span').html(SEARCH.counterNotation(data.response.response.numFound));	
+	        	$('.cat.monograph span').html(SEARCH.counterNotation(data.response.facet_counts.facet_fields.ns[_SOLR_ROOT_+'.bibliodb_books']));
+	        	$('.cat.article span').html(SEARCH.counterNotation(data.response.facet_counts.facet_fields.ns[_SOLR_ROOT_+'.bibliodb_articles']));
+	        	$('.cat.journal span').html(SEARCH.counterNotation(data.response.facet_counts.facet_fields.ns[_SOLR_ROOT_+'.bibliodb_journals']));
 				$('.cat.contribution span').html(0);
 	        }
 	    });	
@@ -305,7 +523,8 @@ var SEARCH = {
 	        		'titles' : $('.filters .chk.titles').hasClass('checked'), 
 	        		'publishers' : $('.filters .chk.publishers').hasClass('checked'),	
 	        	},
-	        	'filtrs' : filtrs 
+	        	'filtrs' : filtrs,
+	        	'sort' : $('select#sort').val()
 	        },
 	        dataType: "json",
 	        success: function (data) {
@@ -341,7 +560,87 @@ var SEARCH = {
 
 	},
 	
-
+    yearBarChart : function() {
+    	
+    	var filtrs = SEARCH.getFilters();
+    	
+    	
+        $.ajax({
+            url: "/yearChart",
+            type: "POST",
+            data: {
+	        	'q': $('#search input').val(),
+	        	'ns': $.map($('.countersbar li.cat:not(.disabled)'), function(a) { return $(a).attr("data-ns");}),
+	        	'page' : SEARCH.page,
+	        	'in' : {
+	        		'authors' : $('.filters .chk.authors').hasClass('checked'),
+	        		'titles' : $('.filters .chk.titles').hasClass('checked'), 
+	        		'publishers' : $('.filters .chk.publishers').hasClass('checked'),	
+	        	},
+	        	'filtrs' : filtrs   
+            },
+            dataType: "json",
+            success: function (data) {
+                $('.barchart').html('');
+                var range = $('.yearslider')[0];
+                try{
+                    range.noUiSlider.destroy();
+                }catch(e){}
+                if(data.length == 0) return;
+                var range = $('.yearslider')[0];
+                var dataArray = data.val;
+                var barwidth = 160/dataArray.length;
+                var max = Math.max.apply(null, dataArray);
+                var svg = d3.select(".barchart").append("svg")
+                          .attr("height","75px")
+                          .attr("width","160px");
+                svg.selectAll("rect")
+                    .data(dataArray)
+                    .enter().append("rect")
+                          .attr("class", "baryear")
+                          .attr("height", function(d, i) {return (d/max*75)})
+                          .attr("width",barwidth)
+                          .attr("x", function(d, i) {return (i * barwidth)})
+                          .attr("y", function(d, i) {return 75 - (d/max*75)});
+                noUiSlider.create(range, {
+                    start: [data.selectedMin,data.selectedMax],
+                    connect: true, // Display a colored bar between the handles
+                    direction: 'ltr', // Put '0' at the bottom of the slider
+                    behaviour: 'tap-drag', // Move handle on tap, bar is draggable
+                    step: 1,
+                    tooltips: true,
+                    range: {
+                        'min': data.minYear-(data.maxYear-data.minYear)/4,
+                        'max': data.maxYear+(data.maxYear-data.minYear)/4
+                    },
+                        pips: {
+                        mode: 'values',
+                        values: [data.minYear,data.maxYear],
+                        density: 5
+                    },
+                      format: {
+                          to: function ( value ) {
+                            return parseInt(value,10);
+                          },
+                          from: function (value) { return value; }
+                        }
+                });
+                range.noUiSlider.on('change', function ( values, handle ) {
+                    if ( values[handle] < data.minYear ) {
+                        range.noUiSlider.set([data.minYear,null]);
+                    } else if ( values[handle] > data.maxYear ) {
+                        range.noUiSlider.set([null,data.maxYear]);
+                    }
+                });
+                range.noUiSlider.on('set', function ( values) {
+                    $('input[name="mindate"]').val(values[0]);
+                    $('input[name="maxdate"]').val(values[1]);
+					SEARCH.page = 1;
+					SEARCH.doSearch();
+                });
+            }
+        });
+    },
 	
 	result : { 
 		object : null,
@@ -384,7 +683,7 @@ var SEARCH = {
 			switch(this.object['_type_']){
 				case 'monograph': return this.object.title || '';  break;
 				case 'article': return this.object.title || '';  break;
-				case 'journal': return '<a href="/document/journal/'+this.object.bid+'">'+this.object.full_title+'</a>' || '';  break;
+				case 'journal': return this.object.full_title || '';  break;
 			}
 		},
 		
@@ -463,17 +762,19 @@ var REF = {
 		            div.html(data);
 					REF.highlight();
 					$.ajax({
-				        url: "/document/page/references/"+div.attr('data-oid')+"/"+$('body').attr('data-bid')+"/"+$('body').attr('data-issue'),
+				        url: "/document/page/references/"+div.attr('data-oid'),
 				        type: "GET",
 				        dataType: "json",
 				        success: function (data) {
 							for(var ref in data){
 				            	var token = data[ref]['contents'][1];
-								div.find('span[_st='+token['start']+']').after('<em data-ref="'+ref+'" class="'+data[ref]['ref_type']+'"></em>');
+								div.find('span[_st='+token['start']+']').after('<em data-ref="'+ref+'" class="'+data[ref]['dis']+' '+data[ref]['ref_type']+'"></em>');
 								REF.allRefs[ref] = data[ref];
 							}
+														
 							var heights = [];
-							div.find('em').each(function(){
+							
+							$(div.find('em').get().reverse()).each(function() { 
 								if(heights[$(this).position().top] == undefined){
 									heights[$(this).position().top] = 0;
 								}else{
@@ -496,6 +797,16 @@ var REF = {
 			REF.loadPage(div);
 		});
 		
+		$("#showallrefs").change(function() {
+		    if(this.checked) {
+		        $('.fulltext').removeClass('displayonlydisamb');
+		        $('.fulltext').addClass('displayallrefs');
+		    }else{
+		        $('.fulltext').addClass('displayonlydisamb');
+		        $('.fulltext').removeClass('displayallrefs');	
+		    }
+		});
+		
 		$('div.notLoaded:lt(5)').each(function(){
 			div = $(this);
 			REF.loadPage(div);
@@ -511,13 +822,16 @@ var REF = {
 			$(this).addClass('active');
 			var div = $(this).closest('div.page');
 			var ref = $(this).attr('data-ref');
-			
+			$('.refDetails').html('');
+			$('.refDetails').removeClass('editmode');
 			$.ajax({
 		        url: "/document/page/reference/"+ref,
 		        type: "GET",
 		        dataType: "html",
 		        success: function (data) {
 		            $('.refDetails').html(data);
+		            $('.refDetails').removeClass('editmode');
+		            $('.refDetails .ui.dropdown.typeselect').dropdown();
 		        }
 		    });				
 			
@@ -533,6 +847,189 @@ var REF = {
 			
 			
 		});		
+		
+		$(document).on('click', '.action.edit', function(){
+			if(! LBC.checkCred()) return;
+			
+			var rD = $(this).closest('.refDetails');
+			rD.toggleClass('editmode');
+			
+			rD.find('tr.type').css('color', 'black');
+			rD.find('tr.type span.val').hide();
+			rD.find('tr.type .ui.dropdown').show();
+			rD.find('tr.type .action.validate').show();
+		});
+
+
+		
+		$(document).on('click', '.action.valid', function(){
+			if(! LBC.checkCred()) return;
+			
+			
+			var ref = $(this).closest('table').attr('data-ref');
+			
+			$.ajax({
+		        url: "/document/saveReferenceDisambiguationValid",
+		        type: "POST",
+		        dataType: "json",
+		        data : {
+		        	reference: ref,
+		        },
+		        beforeSend : function(){
+		        	$('.refDetails').html('');
+		        },
+		        success: function (data) {
+					$('em.active').click();
+		        }
+		    });				
+			
+		});
+
+
+
+		$(document).on('click', '.action.cancel', function(){
+			$('em.active').click();
+		});
+		
+		$(document).on('click', 'tr.type .validate', function(){
+			if(! LBC.checkCred()) return;
+			
+			tr = $(this).closest('tr');
+			rD = tr.closest('.refDetails');
+			old = tr.find('span.val').text();
+			tr.find('span.val').text(tr.find('.ui.dropdown').dropdown('get text'));
+			changetype = (old != tr.find('.ui.dropdown').dropdown('get text'));
+				
+			if(tr.find('.ui.dropdown').dropdown('get value') == 'primary') source = 'asve';
+			if(tr.find('.ui.dropdown').dropdown('get value') == 'secondary') source = 'book';
+			tr.find('span.val').show();
+			tr.find('.dropdown').hide();
+			if(changetype){
+				rD.find('tr.data').hide();
+			}
+			$(this).hide();
+			rD.find('tr.title').show();
+			rD.find('tr.title').css('color', 'black');
+			rD.find('tr.title span.val').hide();
+			rD.find('tr.title .ui.dropdown.'+source).show();
+			rD.find('tr.title .ui.dropdown.'+source).dropdown({
+				apiSettings: {
+					url: '/search/reftitle/'+source+'/{query}?rand='+Math.random(),
+					throttle: 200
+				}
+			});
+			rD.find('tr.title .action.validate').show();
+			
+			
+		});
+		
+		$(document).on('click', 'tr.title .validate', function(){
+			if(! LBC.checkCred()) return;
+			
+			
+			var ref = $(this).closest('table').attr('data-ref');
+			var type = $('.ui.dropdown.typeselect').dropdown('get value');
+			var title = (type == 'primary') ? $('.ui.dropdown.title.asve').dropdown('get value') :  $('.ui.dropdown.title.book').dropdown('get value');
+				
+			
+			
+			$.ajax({
+		        url: "/document/saveReferenceDisambiguation",
+		        type: "POST",
+		        dataType: "json",
+		        data : {
+		        	reference: ref,
+		        	type: type,
+		        	title: title
+		        },
+		        beforeSend : function(){
+		        	$('.refDetails').html('');
+		        },
+		        success: function (data) {
+					$('em.active').click();
+		        }
+		    });				
+			
+		});
+		
+				
+		$(document).on('click', '.fa.disamb', function(){
+			
+			if(! LBC.checkCred()) return;
+			
+			
+			if($(this).hasClass('fa-spinner'))
+				return;
+				
+			var from = ($(this).hasClass('fa-check')) ? 'fa-check' : 'fa-times';
+			var to = ($(this).hasClass('fa-check')) ? 'fa-times' : 'fa-check';
+			var value = (to == 'fa-check') ? true : false; 
+			var dis = $(this).closest('table').attr('data-dis');
+			var field = $(this).attr('data-field');
+			var button = $(this);
+			
+			$.ajax({
+		        url: "/document/saveReferenceDisambiguationState",
+		        type: "POST",
+		        dataType: "json",
+		        data : {
+		        	dis: dis,
+		        	field: field,
+		        	value: value
+		        },
+		        beforeSend : function(){
+		        	button.removeClass(from);
+		        	button.addClass('fa-spinner fa-pulse');
+		        },
+		        success: function (data) {
+		        	button.removeClass('fa-spinner fa-pulse');
+		        	button.addClass(to);
+		        	alertify.success("Flag change successfully");	
+		        }
+		    });					
+			
+		});
+		
+
+		$(document).on('click', '.fa.refer', function(){
+			
+			if(! LBC.checkCred()) return;
+			
+			if($(this).hasClass('fa-spinner'))
+				return;
+				
+			var from = ($(this).hasClass('fa-check')) ? 'fa-check' : 'fa-times';
+			var to = ($(this).hasClass('fa-check')) ? 'fa-times' : 'fa-check';
+			var value = (to == 'fa-check') ? true : false; 
+			var ref = $(this).closest('table').attr('data-ref');
+			var field = $(this).attr('data-field');
+			var button = $(this);
+			
+			$.ajax({
+		        url: "/document/saveReferenceState",
+		        type: "POST",
+		        dataType: "json",
+		        data : {
+		        	ref: ref,
+		        	field: field,
+		        	value: value
+		        },
+		        beforeSend : function(){
+		        	button.removeClass(from);
+		        	button.addClass('fa-spinner fa-pulse');
+		        },
+		        success: function (data) {
+		        	button.removeClass('fa-spinner fa-pulse');
+		        	button.addClass(to);
+		        	if(field == 'correct'){
+		        		$('.fa.refer[data-field="checked"]').removeClass("fa-times").addClass("fa-check");
+		        	}
+		        	alertify.success("Flag change successfully");	
+		        }
+		    });					
+			
+		});
+				
 		
 		$(document).on('keyup', '#textSearch input', function(){
 			var input = $(this);
@@ -587,7 +1084,7 @@ var REF = {
 
 var TOC = {
 	page : null,
-	
+	trAddNew : null,
 	init : function() {
 		
 		TOC.goPage(1);
@@ -602,56 +1099,99 @@ var TOC = {
 			}
 		});
 		
-		
-		$(document).on('keyup','.author input.name' ,function(){
-			var dropdown = $(this).closest('td').find('.authorDropdown');
-			var val = $(this).val();
-			dropdown.html('');
-			if(val.length >=3){
-				$.ajax({
-			        url: "/search/authors/"+encodeURI(val),
-			        type: "GET",
-			        dataType: "html",
-			        success: function (data) {
-			            dropdown.html(data);
-			        }
-			    });	
-			}
+		$(document).on('click', '.fa-pencil-square-o', function(){
+			$(this).toggleClass('fa-pencil-square-o fa-save');
+			$(this).closest('tr').toggleClass('editOff editOn');
 		});
 		
-		$(document).on('click', '.authorDropdown ul.bdb li', function(){
-			var parent = $(this).closest('td');
-			var input = parent.find('input.name');
-			var viaf = parent.find('input.viaf');
-			input.val($(this).text());
-			viaf.val('');
-			parent.find('.authorDropdown').html('');
+		$(document).on('click', '.fa-plus-square-o', function(){
+			trAddNew = $('tr[data-id="new"]').clone();
+	
+			$(this).toggleClass('fa-plus-square-o fa-save');
+			$(this).closest('tr').toggleClass('editOff editOn');
 		});
-
-
-		$(document).on('click', '.authorDropdown ul.viaf li:not(.load)', function(){
-			var parent = $(this).closest('td');
-			var input = parent.find('input.name');
-			var viaf = parent.find('input.viaf');
-			input.val($(this).text());
-			viaf.val($(this).attr('data-viafid'));
-			parent.find('.authorDropdown').html('');
-		});
-
-		$(document).on('click', 'ul.viaf li.load', function(){
-			var input = $(this).closest('td').find('input.name');
+		
+		$(document).on('click', '.fa-save', function(){
+			tr = $(this).closest('tr');
+		
+			var datas = {
+					"document_id": $('body').attr('data-documentid'),
+					"article_id": tr.attr('data-id'),
+					"authors" : tr.find('.dropdown.author').dropdown('get value'),
+					"title" : tr.find('input.title').val(),
+					"page_start" : tr.find('.dropdown.page.start').dropdown('get value'),
+					"page_end" : tr.find('.dropdown.page.end').dropdown('get value')
+			};
 			
-			var ul = $(this).closest('ul');
-			$.ajax({
-	        	url: "/search/viafAuthors/"+encodeURI(input.val()),
-	        	type: "GET",
-	        	dataType: "html",
-	        	success: function (data) {
-	        	    ul.html(data);
-	        	}
-			});
-		});
+			if(datas.title == ""){
+				alertify.error("Title is required.");			
+				return false;
+			}
+			
+			if(datas.page_start == ""){
+				alertify.error("Page start is required.");			
+				return false;
+			}
+			
+			if(datas.page_end == ""){
+				alertify.error("Page end is required.");			
+				return false;
+			}
+			
+			if(parseInt(datas.page_end,10) < parseInt(datas.page_start,10)){
+				alertify.error("Page end should be greather than page start.");			
+				return false;
+			}
+						
 		
+			$.ajax({
+				url: "/document/saveArticle",
+				type:'POST',
+				dataType:'JSON',
+				data: datas,
+				success:function(data){
+					if(data.result == "success"){
+						alertify.success("Article updated successfully.");
+						
+						if(datas['article_id'] == 'new'){
+							$('tr[data-id="new"]').attr('data-id', data.article_id);						
+						}
+						var tr = $('tr[data-id="'+data.article_id+'"]');
+						tr.find('td.author .textual').text(data.authors);
+						tr.find('td.title .textual').text(data.title);
+						tr.find('td.pagerange .textual').text(data.pagerange);
+						tr.find('td.actions .fa-save').toggleClass('fa-pencil-square-o fa-save');
+						tr.toggleClass('editOn editOff');
+						
+						tr.closest('table').append(trAddNew);
+						
+						$('tr[data-id="new"] .ui.dropdown.author').dropdown({
+							apiSettings: {
+								url: '/search/authors/{query}?rand='+Math.random(),
+								throttle: 200
+							},
+							delimiter: '|#|'
+						});
+						$('tr[data-id="new"] .ui.dropdown.page').dropdown();	
+		
+		
+					}
+				}
+			});
+					
+
+		});
+				
+		
+		
+		$('.ui.dropdown.author').dropdown({
+			apiSettings: {
+				url: '/search/authors/{query}?rand='+Math.random(),
+				throttle: 200
+			},
+			delimiter: '|#|'
+		});
+		$('.ui.dropdown.page').dropdown();		
 	},
 	
 	prev : function() {TOC.goPage(TOC.page-2);},
@@ -680,7 +1220,7 @@ var TOC = {
 			var viewerL = OpenSeadragon({
 	        	id: 'openseadragon_left',
 	       	 	prefixUrl: "/i/openseadragon/",
-	        	tileSources: "http://dhlabsrv4.epfl.ch/iiif_lbc/"+bid+"::"+issue+"::"+left+"/info.json",
+	        	tileSources: _IIIF_ROOT_+bid+"::"+issue+"::"+left+"/info.json",
 	        	zoomPerScroll: 1.5,
 	        	showNavigationControl: false,
 	        	immediateRender: true
@@ -691,7 +1231,7 @@ var TOC = {
 			var viewerR = OpenSeadragon({
 	        	id: 'openseadragon_right',
 	       	 	prefixUrl: "/i/openseadragon/",
-	        	tileSources: "http://dhlabsrv4.epfl.ch/iiif_lbc/"+bid+"::"+issue+"::"+right+"/info.json",
+	        	tileSources: _IIIF_ROOT_+bid+"::"+issue+"::"+right+"/info.json",
 	        	zoomPerScroll: 1.5,
 	        	showNavigationControl: false,
 	        	immediateRender: true
@@ -715,7 +1255,7 @@ var TOC = {
 	}
 	
 	
-}
+};
 
 
 

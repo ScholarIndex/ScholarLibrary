@@ -2,7 +2,7 @@
 
 namespace App;
 
-use Jenssegers\Mongodb\Model as Eloquent;
+use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
 
 class Metadata extends Elegant {

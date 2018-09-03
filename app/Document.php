@@ -2,7 +2,7 @@
 
 namespace App;
 
-use Jenssegers\Mongodb\Model as Eloquent;
+use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
 class Document extends Elegant {
     protected $collection = 'documents';
@@ -31,8 +31,6 @@ class Document extends Elegant {
 	public function metadata(){
 		return $this->hasOne('App\Metadata', '_id','metadata_id');		
 	}
-
-	
 
 	public function __toString(){
 		return sprintf("<Document: mongoid = %s, bid=%s, internal_id=%s, type=%s, number of pages=%i>", $this->id, $this->bid, $this->internal_id, $this->type, count($this->pages));

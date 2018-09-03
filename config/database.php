@@ -91,7 +91,7 @@ return [
             'database'  => env('DB_DATABASE', 'forge'),
             'username'  => env('DB_USERNAME', 'forge'),
             'password'  => env('DB_PASSWORD', ''),
-	    'options' => array('db' => 'admin'),
+	    'options' => array('db' => 'admin', 'authSource' => 'admin'),
             'charset'   => 'utf8',
             'prefix'    => '',
         ],

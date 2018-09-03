@@ -14,13 +14,15 @@
 Route::get('/', 'MainController@welcome');
 Route::get('/about', 'MainController@about');
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(array('middleware' => 'auth'), function () {
 
 	Route::get('/search', 'MainController@search');
 	Route::get('/lastSearch', 'MainController@lastSearch');
+	Route::post('/yearChart', 'MainController@yearChart');
 	Route::post('/search', 'MainController@searchPost');
 	Route::post('/count', 'MainController@countPost');
 	Route::post('/filters', 'MainController@filters');
+	Route::get('/mydocuments', 'MainController@mydocuments');
 	
 	Route::get('/article/overview/{oid}', 'MainController@articleOverview');
 	Route::get('/article/scans/{oid}', 'MainController@articleScans');
@@ -31,7 +33,15 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('/document/overview/{bid}/{issue?}', 'MainController@documentOverview');
 	Route::get('/document/journal/{bid}/{issue?}', 'MainController@documentJournal');
+	
 	Route::get('/document/progress/{document_id}', 'MainController@documentProgress');
+	
+	
+	Route::get('/document/bookmarks/{document_id}/{page_id?}', 'MainController@documentBookmarks');
+	Route::get('/document/ajaxbookmarks/{action}/{type}/{document_id}/{page_id?}', 'MainController@documentAjaxBookmarks');
+	Route::get('/document/indexgolden/{document_id}/{page_id}', 'MainController@documentIndexgolden');
+	Route::get('/document/ajaxindexgolden/{action}/{type}/{document_id}/{page_id}', 'MainController@documentAjaxIndexgolden');
+
 
 	Route::get('/document/scans/{bid}/{issue?}', 'MainController@documentScans');
 	Route::get('/document/references/{bid}/{issue?}', 'MainController@documentReferences');
@@ -40,10 +50,19 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/document/toc/{bid}/{issue?}', 'MainController@documentToc');
 	Route::get('/document/viewer/{bid}/{issue?}', 'MainController@documentViewer');
 	
-	Route::get('/document/page/references/{oid}/{bid}/{issue?}', 'MainController@pageReferences'); 
+	Route::get('/document/page/references/{oid}', 'MainController@pageReferences'); 
 	Route::get('/document/page/text/{oid}', 'MainController@pageText'); 
-	Route::get('/search/authors/{term}', 'MainController@searchAuthors');
-	Route::get('/search/viafAuthors/{term}', 'MainController@searchViafAuthors');
+	Route::get('/search/authors/{term?}', 'MainController@searchAuthors');
+	Route::get('/search/reftitle/{source}/{term?}', 'MainController@searchReftitle');
+	
+	Route::post('/document/saveSplit', 'MainController@saveSplit');
+	Route::post('/document/savePpn', 'MainController@savePpn');
+	Route::post('/document/saveArticle', 'MainController@saveArticle');
+	
+	Route::post('/document/saveReferenceDisambiguationValid', 'MainController@saveRefDisValid');
+	Route::post('/document/saveReferenceDisambiguation', 'MainController@saveRefDis');
+	Route::post('/document/saveReferenceDisambiguationState', 'MainController@saveRefDisState');
+	Route::post('/document/saveReferenceState', 'MainController@saveRefState');
 
 });
 

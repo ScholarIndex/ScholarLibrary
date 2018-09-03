@@ -4,31 +4,56 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>LB Catalogue v2.0</title>
+	<title>Scholar Index</title>
 	<link href="https://fonts.googleapis.com/css?family=Handlee" rel="stylesheet">
-	<link rel="stylesheet" href="{{ asset('/css/app.css') }}">
+	
 	<link rel="stylesheet" href="{{ asset('/css/font-awesome.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('/css/nouislider.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('/css/jquery-ui.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('/css/alertify.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('/semantic-ui/semantic.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('/css/themes/default.min.css') }}">
+
+	<link rel="stylesheet" href="{{ asset('/css/app.css') }}">
+	
+
+	
 	<script>var _SOLR_ROOT_ = '{{env('SOLR_ROOT')}}';</script>
+	<script>var _IIIF_ROOT_ = '{{env('IIIF_ROOT')}}';</script>
 	<script src="{{ asset('/js/jquery-3.2.0.min.js') }}"></script>
+	<script src="{{ asset('/js/jquery-ui.min.js') }}"></script>
 	<script src="{{ asset('/js/lazysizes.min.js') }}"></script>
 	<script src="{{ asset('/js/openseadragon.min.js') }}"></script>
 	<script src="{{ asset('/js/jquery.hashchange.min.js') }}"></script>
 	<script src="{{ asset('/js/jquery.mark.min.js') }}"></script>
 	<script src="{{ asset('/js/jquery.scrollTo.min.js') }}"></script>
-
+	<script src="{{ asset('/js/d3.min.js') }}"></script>
+	<script src="{{ asset('/js/d3.tip.min.js') }}"></script>
+	<script src="{{ asset('/js/nouislider.min.js') }}"></script>
+	<script src="{{ asset('/js/alertify.min.js') }}"></script>
+	<script src="{{ asset('/semantic-ui/semantic.min.js') }}"></script>
 	<script src="{{ asset('/js/all.js') }}"></script>
+	
+
+
+
+
+
+
 
 </head>
-<body class="{{$hasTopMenu}}" data-js="{{$dataJs or ''}}" data-pagecount="{{$pagecount or ''}}" data-bid="{{$bid or ''}}" data-issue="{{$issue or ''}}" data-documentid="{{$documentId or ''}}" data-type="{{$type or ''}}" data-provenance="{{$provenance or ''}}">
+<body class="{{$hasTopMenu}}" data-cred="{{implode(',',Auth::user()->roles)}}" data-js="{{$dataJs or ''}}" data-pagecount="{{$pagecount or ''}}" data-bid="{{$bid or ''}}" data-issue="{{$issue or ''}}" data-documentid="{{$documentId or ''}}" data-pageid="{{$pageId or ''}}" data-type="{{$type or ''}}" data-provenance="{{$provenance or ''}}">
 	<i class="fa fa-question-circle"></i>
 	<div id="searchmenu">@yield('searchmenu')</div>
 
 	<div id="content">@yield('content')</div>
 	<div id="sidemenu">
-		<a class="title" href="/search">Linked<br />Books</a>
+		<!--<a class="title" href="/search">Linked<br />Books</a>-->
 		@yield('sidemenu')
 
 		<div class="progress"></div>
+		<div class="indexgolden"></div>
+		<div class="bookmarks"></div>
 	</div>
 	<div id="screenwrapper">
 		Please use this app on a screen with 1430px minimal width

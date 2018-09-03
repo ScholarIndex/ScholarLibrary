@@ -39,32 +39,124 @@
 	</table>
 
 	
-	
-	
-
 	<table id="toc">
-		<tr><th>Author</th><th class="title">Title</th><th>Page range</th><th></th></tr>
+		<tr><th>Authors</th><th class="title">Title</th><th>Page range</th><th>Actions</th></tr>
 		
 		@foreach($articles as $a)
-			<tr>
-				<td class="author"><input type="text" disabled value="{{$a['authors'][0]}}"/></td>
-				<td class="title"><input type="text" disabled value="{{$a['title']}}" /></td>
-				<td>{{$a['start_img_number']}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$a['end_img_number']}}</td>	
-				<td><!--<i class="fa fa-trash-o"></i>--></td>
+			<tr class="editOff" data-id="{{$a['id']}}">
+				<td class="author">
+					<span class="textual">
+						{{--*/ $first = true /*--}}
+						@foreach($disamb[$a['id']] as $k => $v)
+							@if($first)
+					    		{{$v}}
+					    		{{--*/ $first = false /*--}}
+					    	@else
+					    		,{{$v}}
+					    	@endif
+					    @endforeach
+					</span>
+					<div class="fields">
+						<div class="ui fluid multiple search selection dropdown author">
+						  <input name="authors" type="hidden" value="{{join(',', array_keys($disamb[$a['id']]))}}">
+						  <i class="dropdown icon"></i>
+						  <div class="default text">Authors</div>
+						  <div class="menu">
+						  	@foreach($disamb[$a['id']] as $k => $v)
+						      <div class="item" data-value="{{$k}}">{{$v}}</div>
+						    @endforeach
+						  </div>
+						 </div>
+					 </div>
+				</td>
+				<td class="title">
+					<span class="textual">{{$a['title']}}</span>
+					<div class="fields"><div class="ui fluid input"><input placeholder="Title" class="title" type="text" value="{{$a['title']}}" /></div></div>
+				</td>
+				<td class="pagerange">
+					<span class="textual">{{$a['start_img_number']}}&nbsp;&nbsp;-&nbsp;&nbsp;{{$a['end_img_number']}}</span>
+					<div class="fields">
+					From : <div class="ui search selection dropdown page start">
+					  <input type="hidden" name="pagestart" value="{{$a['start_img_number']}}">
+					  <i class="dropdown icon"></i>
+					  <div class="default text">page</div>
+					  <div class="menu">
+							@foreach($pages as $p)
+								<div class="item" data-value="{{$p->single_page_file_number}}">{{$p->single_page_file_number}}</div>
+							@endforeach
+					  </div>
+					</div> 
+					To : <div class="ui search selection dropdown page end">
+						  <input type="hidden" name="pageend" value="{{$a['end_img_number']}}">
+						  <i class="dropdown icon"></i>
+						  <div class="default text">page</div>
+						  <div class="menu">
+							@foreach($pages as $p)
+								<div class="item" data-value="{{$p->single_page_file_number}}">{{$p->single_page_file_number}}</div>
+							@endforeach
+						  </div>
+						</div>
+					</div>
+				</td>	
+				<td class="actions">
+					@if(Auth::check() && in_array('editor', Auth::user()->roles))
+						<i class="fa fa-pencil-square-o"></i><!--&nbsp;<i class="fa fa-trash-o"></i>-->
+					@endif
+				</td>
 			</tr>
 		@endforeach
-<!--
-		<tr class="addnew"><td colspan=5>Add new line</td></tr>
+		
 	
-
-		<tr>
-			<td class="author"><input class="name" type="text" /><input class="viaf" type="hidden" name="viaf" /><div class="authorDropdown"></div></td>
-			<td class="title"><input type="text" /></td>
-			<td><input type="text" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" /></td>	
-			<td><i class="fa fa-plus-square-o"></i></td>
-		</tr>
--->	
-
+		<tr class="editOff" data-id="new">
+			<td class="author">
+				<span class="textual"></span>
+				<div class="fields">
+				<div class="ui fluid multiple search selection dropdown author">
+				  <input name="authors" type="hidden" value="">
+				  <i class="dropdown icon"></i>
+				  <div class="default text">Authors</div>
+				  <div class="menu"></div>
+				 </div>
+				 </div>
+			</td>
+			<td class="title">
+				<span class="textual"></span>
+				<div class="fields">
+				<div class="ui fluid input"><input placeholder="Title" class="title" type="text" value="" /></div>
+				</div>
+			</td>
+			<td class="pagerange">
+				<span class="textual"></span>
+					<div class="fields">
+					From : <div class="ui search selection dropdown page start">
+					  <input type="hidden" name="pagestart" value="">
+					  <i class="dropdown icon"></i>
+					  <div class="default text">page</div>
+					  <div class="menu">
+							@foreach($pages as $p)
+								<div class="item" data-value="{{$p->single_page_file_number}}">{{$p->single_page_file_number}}</div>
+							@endforeach
+					  </div>
+					</div> 
+					To : <div class="ui search selection dropdown page end">
+						  <input type="hidden" name="pageend" value="">
+						  <i class="dropdown icon"></i>
+						  <div class="default text">page</div>
+						  <div class="menu">
+							@foreach($pages as $p)
+								<div class="item" data-value="{{$p->single_page_file_number}}">{{$p->single_page_file_number}}</div>
+							@endforeach
+						  </div>
+						</div>
+					</div>				
+				
+			</td>	
+			<td class="actions">
+				@if(Auth::check() && in_array('editor', Auth::user()->roles))
+					<i class="fa fa-plus-square-o"></i>
+				@endif
+			</td>
+		</tr>		
 	</table>
 
 

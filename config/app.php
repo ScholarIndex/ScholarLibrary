@@ -151,7 +151,7 @@ return [
 		App\Providers\HelperServiceProvider::class,
 
 
-	Barryvdh\Debugbar\ServiceProvider::class,
+	//Barryvdh\Debugbar\ServiceProvider::class,
 
 
     ],

@@ -41,9 +41,12 @@
     <body>
         <div class="container">
             <div class="content">
-                <div class="title">LB Catalogue</div>
-				<p style="font-size:2.4em;">v2.1_beta</p>
+                <div class="title"><img src="/logoVSL.png" /></div>
+				<p style="font-style:">The Scholar Library gives you access to thousands of digitized publications about the history of Venice</p>
+				<p style="font-size:2.4em;">v2.5</p>
 		<p><a href="/about">The Project</a> | <?php echo ( (Auth::check()) ? "<a href='/search'>HomeSearch</a> | " : ""); ?><a href="/auth/login">Login</a> | <a href="/auth/logout">Logout</a> | <?php echo ( (Auth::check()) ? Auth::user()->login." (".Auth::user()->email.")" : "Not logged in"); ?><!-- | <a href="/auth/register">Register</a>-->
+		
+		<p style="font-style:italic;margin-top:50px;font-size:0.7em;">The access to the Scholar Library is currently restricted to users with login (due to the current license agreements with the content providers).<br />If you are interested in trying out this tool, write to Giovanni Colavizza or Matteo Romanello (firstName.lastName[at] epfl [dot] ch) with a one-line description of your research interests</p>
 
 
 	

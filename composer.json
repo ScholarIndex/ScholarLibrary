@@ -7,7 +7,7 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
-        "jenssegers/mongodb": "2.2.*",
+        "jenssegers/mongodb": "3.0.*",
         "illuminate/html": "^5.0",
         "barryvdh/laravel-debugbar": "^2.3",
         "bheller/images-generator": "^1.0"

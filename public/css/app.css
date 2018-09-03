@@ -30,7 +30,8 @@ table {
   border-spacing: 0; }
 
 html {
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  overflow: hidden; }
 
 *,
 *:before,
@@ -117,7 +118,16 @@ a {
   background: #0A3B4C;
   color: #D5E3E4;
   padding: 20px;
-  font-size: 14px; }
+  font-size: 14px;
+  overflow-y: auto; }
+  #sidemenu::-webkit-scrollbar-track {
+    background-color: transparent; }
+  #sidemenu::-webkit-scrollbar {
+    width: 8px; }
+  #sidemenu::-webkit-scrollbar-thumb {
+    background-color: #EEA731;
+    border: 2px solid #0A3B4C;
+    /*4px solid #EAF1F1;*/ }
   #sidemenu li {
     margin: 20px 0;
     line-height: 20px;
@@ -134,15 +144,22 @@ a {
       margin-right: 10px; }
     #sidemenu li.sub.open:before {
       content: "\f0d7"; }
-    #sidemenu li .chk:before {
-      content: "\f0c8";
-      font-size: 18px;
-      font-family: FontAwesome;
-      color: #f9f9f9;
-      margin-right: 10px;
-      vertical-align: middle; }
-    #sidemenu li .chk.checked:before {
-      content: "\f14a"; }
+    #sidemenu li .chk {
+      font-size: 0.8em;
+      padding-left: 20px; }
+      #sidemenu li .chk:before {
+        content: "\f0c8";
+        font-size: 18px;
+        font-family: FontAwesome;
+        color: #f9f9f9;
+        margin-right: 10px;
+        vertical-align: middle;
+        margin-left: -24px; }
+      #sidemenu li .chk.checked:before {
+        content: "\f14a"; }
+      #sidemenu li .chk.year {
+        margin: 0;
+        padding-bottom: 20px; }
   #sidemenu a.title {
     font-size: 18px;
     margin-bottom: 20px;
@@ -159,13 +176,47 @@ a {
       margin-right: 20px;
       vertical-align: baseline;
       font-size: 18px; }
+  #sidemenu .barchart {
+    width: 160px;
+    height: 75px; }
+  #sidemenu .yearfilter {
+    margin-bottom: 60px; }
+    #sidemenu .yearfilter .yearslider {
+      font-size: 0.7em;
+      margin-top: 40px;
+      margin-bottom: 20px; }
+      #sidemenu .yearfilter .yearslider .noUi-connect {
+        background: #EEA731; }
+      #sidemenu .yearfilter .yearslider .noUi-value {
+        margin-top: 13px; }
+    #sidemenu .yearfilter ul {
+      margin-top: 5px; }
+    #sidemenu .yearfilter.disabled .yearslider {
+      opacity: 0.3; }
+      #sidemenu .yearfilter.disabled .yearslider .noUi-connect {
+        background: #888; }
+    #sidemenu .yearfilter .baryear {
+      fill: #D5E3E4; }
+  #sidemenu .allfilters {
+    color: #EEA731;
+    cursor: pointer;
+    font-size: 0.8em; }
+  #sidemenu p.menuCategory {
+    color: #EEA731;
+    border-bottom: 1px solid #EEA731;
+    margin: 20px 0;
+    padding-bottom: 2px; }
+  #sidemenu select {
+    font-size: 0.8em;
+    padding: 3px; }
 
 #content {
   position: absolute;
   top: 0;
   right: 0;
   left: 200px;
-  bottom: 0; }
+  bottom: 0;
+  overflow-y: auto; }
   #content .results {
     display: -ms-flexbox;
     display: flex;
@@ -208,7 +259,7 @@ a {
       #content .results .card.monograph:before {
         background: #DC6D72; }
       #content .results .card.contribution:before {
-        background: #EC8CDC; }
+        background: #EC8CD8; }
       #content .results .card.journal:before {
         background: #6ACE35; }
       #content .results .card.article:before {
@@ -221,25 +272,26 @@ a {
     height: 80px;
     display: -ms-flexbox;
     display: flex; }
+    #searchmenu .searchbar .about, #searchmenu .searchbar .logout, #searchmenu .searchbar .mydoc {
+      line-height: 80px;
+      color: #EEA731;
+      position: absolute;
+      font-weight: bold; }
     #searchmenu .searchbar .about {
-      line-height: 80px;
-      color: #EEA731;
-      position: absolute;
-      right: 80px;
-      font-weight: bold; }
-    #searchmenu .searchbar .loginname {
-      line-height: 80px;
-      color: #EEA731;
-      position: absolute;
-      right: 260px;
-      font-weight: bold; }
+      right: 80px; }
+    #searchmenu .searchbar .logout {
+      right: 200px; }
+    #searchmenu .searchbar .mydoc {
+      right: 300px; }
     #searchmenu .searchbar .title {
-      padding: 20px;
+      padding: 5px;
       width: 200px;
       color: #D5E3E4;
       font-size: 18px;
       line-height: 22px;
       display: inline-block; }
+      #searchmenu .searchbar .title img {
+        width: 130px; }
       #searchmenu .searchbar .title:hover {
         font-weight: normal; }
     #searchmenu .searchbar .searchform #search {
@@ -307,9 +359,9 @@ a {
         #searchmenu .countersbar ul li.cat.monograph:before {
           background: #DC6D72; }
         #searchmenu .countersbar ul li.cat.contribution span {
-          border-color: #EC8CDC; }
+          border-color: #EC8CD8; }
         #searchmenu .countersbar ul li.cat.contribution:before {
-          background: #EC8CDC; }
+          background: #EC8CD8; }
         #searchmenu .countersbar ul li.cat.journal span {
           border-color: #6ACE35; }
         #searchmenu .countersbar ul li.cat.journal:before {
@@ -330,6 +382,8 @@ a {
             background: #ccc; }
       #searchmenu .countersbar ul li.docs {
         font-size: 18px; }
+        #searchmenu .countersbar ul li.docs p {
+          margin: 0; }
       #searchmenu .countersbar ul li.cat span {
         border: 3px solid black;
         vertical-align: middle;
@@ -425,7 +479,8 @@ a {
     font-weight: bold;
     height: 60px;
     line-height: 32px;
-    border-bottom: 1px solid #D5E3E4; }
+    border-bottom: 1px solid #D5E3E4;
+    margin-bottom: 4px; }
   .contentWrapper table.metadatas {
     display: inline-block;
     vertical-align: top; }
@@ -518,12 +573,21 @@ a {
     width: 100%;
     margin-top: 20px;
     margin-bottom: 100px;
-    font-size: 18px; }
+    font-size: 14px;
+    /*input { font-size: 12px;  background:white; border:1px solid $darkyellow; border-radius:4px; padding: 5px; outline: none; }*/
+    /*input:disabled { border: 1px solid white;}*/ }
     .contentWrapper table#toc tr {
       height: 36px; }
+    .contentWrapper table#toc tr.editOff .fields {
+      display: none; }
+    .contentWrapper table#toc tr.editOn .textual {
+      display: none; }
+    .contentWrapper table#toc .ui.dropdown.page {
+      min-width: 0; }
     .contentWrapper table#toc td, .contentWrapper table#toc th {
-      text-align: center;
-      vertical-align: middle; }
+      text-align: left;
+      vertical-align: middle;
+      padding: 3px; }
     .contentWrapper table#toc th {
       font-weight: bold;
       background: #0A3B4C;
@@ -534,27 +598,23 @@ a {
     .contentWrapper table#toc td .fa-sort {
       color: #EEA731;
       cursor: pointer; }
-    .contentWrapper table#toc td.author, .contentWrapper table#toc td.title {
+    .contentWrapper table#toc td.author {
+      width: 400px; }
+    .contentWrapper table#toc td.author input {
+      padding: 0; }
+    .contentWrapper table#toc td.title {
       text-align: left; }
-      .contentWrapper table#toc td.author input, .contentWrapper table#toc td.title input {
+      .contentWrapper table#toc td.title input {
         width: 400px; }
+    .contentWrapper table#toc td.actions i.fa {
+      cursor: pointer;
+      font-size: 1.2em; }
     .contentWrapper table#toc tr.addnew {
       height: 24px; }
       .contentWrapper table#toc tr.addnew td {
         background: #F5D397;
         border-radius: 5px;
         font-size: 14px; }
-    .contentWrapper table#toc input {
-      font-size: 12px;
-      background: #EAF1F1;
-      border: 1px solid #EAF1F1;
-      border-radius: 4px;
-      padding: 5px;
-      outline: none; }
-    .contentWrapper table#toc input:focus {
-      background: white;
-      border: 1px solid #EEA731;
-      outline: none; }
     .contentWrapper table#toc .authorDropdown {
       position: absolute;
       background: #EAF1F1;
@@ -588,7 +648,7 @@ a {
     position: relative; }
     .contentWrapper #textSearch input {
       width: 600px;
-      margin-bottom: 30px;
+      margin-bottom: 10px;
       height: 40px;
       border-radius: 4px;
       border: 2px solid #D5E3E4;
@@ -602,6 +662,19 @@ a {
       left: 20px;
       position: absolute;
       top: 25px; }
+  .contentWrapper div#showallref {
+    text-align: right;
+    font-size: 0.8em;
+    color: #EEA731;
+    width: 600px;
+    margin-bottom: 10px; }
+    .contentWrapper div#showallref label {
+      cursor: pointer; }
+    .contentWrapper div#showallref input {
+      margin: 0px;
+      margin-top: -2px;
+      margin-right: 3px;
+      vertical-align: middle; }
   .contentWrapper div.fulltext {
     height: calc(100% - 170px);
     width: 600px;
@@ -671,7 +744,7 @@ a {
         right: -14px;
         margin-top: 2px;
         background: white;
-        display: inline-block;
+        opacity: 0.1;
         border: 2px solid #EEA731;
         cursor: pointer;
         width: 10px;
@@ -679,17 +752,60 @@ a {
         border-radius: 5px; }
         .contentWrapper div.fulltext div em.active {
           background: #EEA731; }
+        .contentWrapper div.fulltext div em.disamb {
+          opacity: 1; }
       .contentWrapper div.fulltext div em.x1 {
         right: -3px; }
       .contentWrapper div.fulltext div em.x2 {
         right: 8px; }
       .contentWrapper div.fulltext div em.x3 {
         right: 19px; }
+      .contentWrapper div.fulltext div em.x4 {
+        right: 30px; }
+      .contentWrapper div.fulltext div em.x5 {
+        right: 41px; }
+    .contentWrapper div.fulltext.displayallrefs em {
+      opacity: 1; }
+    .contentWrapper div.fulltext.displayonlydisamb em.disamb {
+      opacity: 1; }
   .contentWrapper .refDetails {
     width: 600px;
     left: 860px;
     position: fixed;
     top: 220px; }
+    .contentWrapper .refDetails .ui.fluid.dropdown {
+      display: none;
+      min-width: 350px; }
+    .contentWrapper .refDetails .action.validate {
+      display: none; }
+    .contentWrapper .refDetails .action.edit {
+      display: inline-block; }
+    .contentWrapper .refDetails .action.cancel {
+      display: none; }
+    .contentWrapper .refDetails .fa.disamb {
+      cursor: pointer; }
+    .contentWrapper .refDetails .fa.disamb.fa-check {
+      color: green; }
+    .contentWrapper .refDetails .fa.disamb.fa-times {
+      color: red; }
+    .contentWrapper .refDetails .fa.disamb.fa-spinner {
+      color: black; }
+    .contentWrapper .refDetails .fa.refer {
+      cursor: pointer; }
+    .contentWrapper .refDetails .fa.refer.fa-check {
+      color: green; }
+    .contentWrapper .refDetails .fa.refer.fa-times {
+      color: red; }
+    .contentWrapper .refDetails .fa.refer.fa-spinner {
+      color: black; }
+    .contentWrapper .refDetails.editmode tr {
+      color: #ccc; }
+    .contentWrapper .refDetails.editmode .action.edit {
+      display: none; }
+    .contentWrapper .refDetails.editmode .action.cancel {
+      display: inline-block; }
+    .contentWrapper .refDetails.editmode .action.valid {
+      display: none; }
     .contentWrapper .refDetails table {
       color: #0A3B4C; }
       .contentWrapper .refDetails table td, .contentWrapper .refDetails table th {
@@ -700,6 +816,23 @@ a {
         font-weight: bold; }
       .contentWrapper .refDetails table th {
         padding-right: 80px; }
+      .contentWrapper .refDetails table tr.title.notreferenced {
+        display: none; }
+    .contentWrapper .refDetails .action {
+      text-align: center;
+      font-size: 0.8em;
+      color: #0A3B4C;
+      background: #EEA731;
+      cursor: pointer;
+      border-radius: 4px;
+      padding: 3px 8px;
+      display: inline-block; }
+      .contentWrapper .refDetails .action:hover {
+        font-weight: bold; }
+    .contentWrapper .refDetails .action.edit {
+      margin-bottom: 10px; }
+    .contentWrapper .refDetails .action.cancel {
+      margin-bottom: 10px; }
 
 .filmstrip {
   position: absolute;
@@ -738,6 +871,53 @@ a {
   font-size: 13px;
   overflow: auto;
   line-height: 24px; }
+  #textview div.splitter {
+    position: relative;
+    height: 4px;
+    width: 96%;
+    border-bottom: 1px solid #ccc;
+    margin-top: 3px;
+    margin-bottom: 10px; }
+    #textview div.splitter span.splitHere {
+      display: none;
+      background: #EEA731;
+      color: #0A3B4C;
+      border-radius: 2px;
+      position: absolute;
+      right: 25px;
+      top: -22px;
+      width: 60px;
+      font-size: 0.9em;
+      text-align: center; }
+    #textview div.splitter span.splitRemove {
+      display: none;
+      background: #EEA731;
+      color: #0A3B4C;
+      border-radius: 2px;
+      position: absolute;
+      right: 0;
+      top: -22px;
+      width: 20px;
+      font-size: 0.9em;
+      text-align: center; }
+    #textview div.splitter:before {
+      content: "";
+      border: 2px solid #ccc;
+      width: 8px;
+      height: 8px;
+      position: absolute;
+      margin-top: -1px;
+      background: white;
+      left: 0;
+      border-radius: 8px; }
+    #textview div.splitter.enabled {
+      border-color: #0A3B4C;
+      cursor: pointer; }
+      #textview div.splitter.enabled:before {
+        border-color: #0A3B4C;
+        background: #EEA731; }
+      #textview div.splitter.enabled span {
+        display: block; }
   #textview a.pn {
     display: none; }
   #textview::-webkit-scrollbar-track {
@@ -746,6 +926,41 @@ a {
     width: 8px; }
   #textview::-webkit-scrollbar-thumb {
     background-color: #EEA731; }
+
+#actions {
+  position: absolute;
+  top: 80px;
+  bottom: 180px;
+  margin-left: 1240px; }
+  #actions .action {
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    margin-bottom: 5px;
+    background: #EEA731;
+    color: #0A3B4C;
+    padding: 4px 0;
+    min-width: 160px;
+    border-radius: 4px; }
+    #actions .action .sub {
+      display: none;
+      line-height: 1.5em;
+      margin-top: 4px;
+      background: #F6CF93;
+      font-size: 0.8em;
+      padding-top: 4px; }
+    #actions .action.open .sub {
+      display: block; }
+    #actions .action input[type="text"] {
+      width: 60px;
+      text-align: center; }
+    #actions .action input[type="checkbox"] {
+      vertical-align: middle; }
+    #actions .action .save {
+      background: #EEA731;
+      color: #0A3B4C;
+      padding-top: 3px;
+      margin-top: 3px; }
 
 .bar {
   background: #D5E3E4;
@@ -921,5 +1136,31 @@ body[data-js="ARTICLEOVERVIEW"] #helpwrapper p.ARTICLEOVERVIEW {
 
 body[data-js="ARTICLEOVERVIEW"] #helpwrapper p.nohelp {
   display: none; }
+
+#sidemenu .bookmarks {
+  margin-top: 20px; }
+
+#sidemenu .bookmarks li {
+  position: relative;
+  margin: 3px 0; }
+
+#sidemenu .bookmarks i {
+  color: #EEA731;
+  position: absolute;
+  right: 15px;
+  top: 5px; }
+
+#sidemenu .indexgolden {
+  margin-top: 20px; }
+
+#sidemenu .indexgolden li {
+  position: relative;
+  margin: 3px 0; }
+
+#sidemenu .indexgolden i {
+  color: #EEA731;
+  position: absolute;
+  right: 15px;
+  top: 5px; }
 
 /*# sourceMappingURL=app.css.map */
