@@ -24,6 +24,7 @@ use App\BibliodbAsve;
 use App\BibliodbBook;
 use App\Disambiguation;
 use App\Reference;
+use IIIFHelpers;
 use bheller\ImagesGenerator\ImagesGeneratorProvider;
 use Illuminate\Http\Request;
 use PiwikTracker;
@@ -793,6 +794,8 @@ class MainController extends Controller
 			$o['bid'] = $bid;
 			if($issue != null)
 				$o['issue'] = $issue;
+
+			$o['bidwithprov'] = IIIFHelpers::bidWithProv($bid, $issue);
 			$o['document'] = $d;
 			$o['documentId'] = $d->id;
 			$o['metadata'] = $d->metadata;

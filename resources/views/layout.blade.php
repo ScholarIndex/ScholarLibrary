@@ -42,7 +42,7 @@
 
 
 </head>
-<body class="{{$hasTopMenu}}" data-cred="{{implode(',',Auth::user()->roles)}}" data-js="{{$dataJs or ''}}" data-pagecount="{{$pagecount or ''}}" data-bid="{{$bid or ''}}" data-issue="{{$issue or ''}}" data-documentid="{{$documentId or ''}}" data-pageid="{{$pageId or ''}}" data-type="{{$type or ''}}" data-provenance="{{$provenance or ''}}">
+<body class="{{$hasTopMenu}}" data-cred="{{implode(',',Auth::user()->roles)}}" data-js="{{$dataJs or ''}}" data-pagecount="{{$pagecount or ''}}" data-bid="{{$bid or ''}}" data-issue="{{$issue or ''}}" data-documentid="{{$documentId or ''}}" data-pageid="{{$pageId or ''}}" data-type="{{$type or ''}}" data-provenance="{{$provenance or ''}}" data-bidwithprov="{{$bidwithprov or ''}}">
 	<i class="fa fa-question-circle"></i>
 	<div id="searchmenu">@yield('searchmenu')</div>
 

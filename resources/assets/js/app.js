@@ -1202,7 +1202,7 @@ var TOC = {
 		nbPage = parseInt($('body').attr('data-pagecount'),10);
 		bid = $('body').attr('data-bid');
 		issue = $('body').attr('data-issue');
-
+		bidwithprov = $('body').attr('data-bidwithprov');
 		if(n < 1 || n > nbPage)
 			return;
 		
@@ -1220,7 +1220,7 @@ var TOC = {
 			var viewerL = OpenSeadragon({
 	        	id: 'openseadragon_left',
 	       	 	prefixUrl: "/i/openseadragon/",
-	        	tileSources: _IIIF_ROOT_+bid+"::"+issue+"::"+left+"/info.json",
+	        	tileSources: _IIIF_ROOT_+bidwithprov+"::"+issue+"::"+left+"/info.json",
 	        	zoomPerScroll: 1.5,
 	        	showNavigationControl: false,
 	        	immediateRender: true
@@ -1231,7 +1231,7 @@ var TOC = {
 			var viewerR = OpenSeadragon({
 	        	id: 'openseadragon_right',
 	       	 	prefixUrl: "/i/openseadragon/",
-	        	tileSources: _IIIF_ROOT_+bid+"::"+issue+"::"+right+"/info.json",
+	        	tileSources: _IIIF_ROOT_+bidwithprov+"::"+issue+"::"+right+"/info.json",
 	        	zoomPerScroll: 1.5,
 	        	showNavigationControl: false,
 	        	immediateRender: true
